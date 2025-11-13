@@ -108,7 +108,7 @@ main {
 }
 
 /* ===============================
-   Tabela de tarefas (caso ainda use)
+   Tabela de tarefas
 =============================== */
 .tasks-table {
   width: 100%;
@@ -134,6 +134,7 @@ main {
 .tasks-table td.actions {
   white-space: nowrap;
 }
+
 
 /* ===============================
    Botões
@@ -209,6 +210,25 @@ footer.footer {
 }
 
 /* ===============================
+   Busy Spinner Animation
+=============================== */
+.spinner {
+  width: 48px;
+  height: 48px;
+  border: 5px solid rgba(0, 0, 0, 0.1);
+  border-top-color: var(--accent);
+  border-radius: 50%;
+  animation: spin 3.0s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+/* ===============================
    Modal Close Button
 =============================== */
 .close-modal-btn {
@@ -280,14 +300,6 @@ footer.footer {
   cursor: pointer;
   user-select: none;
   transition: transform 0.15s ease, color 0.2s ease, opacity 0.2s ease;
-}
-
-.status-cell[data-concluido="true"] {
-  color: rgb(16, 216, 16);
-}
-
-.status-cell[data-concluido="false"] {
-  color: rgb(196, 4, 4);
 }
 
 .status-cell:hover {

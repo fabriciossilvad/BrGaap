@@ -1,5 +1,5 @@
-// app.js - Simple SPA behavior for list page
 const API_BASE = "http://localhost:5188/todos";
+
 let state = {
   page: 1,
   pageSize: 10,
@@ -11,7 +11,24 @@ let searchTimer = null;
 
 function el(id){ return document.getElementById(id); }
 
+/* ===============================
+   Busy Indicator Controls
+=============================== */
+function showBusy() {
+  const b = el('busy');
+  if (b) b.classList.remove('hidden');
+}
+
+function hideBusy() {
+  const b = el('busy');
+  if (b) b.classList.add('hidden');
+}
+
+/* ===============================
+   Fetch Tarefas
+=============================== */
 async function fetchTodos(){
+  showBusy();
   try{
     const params = new URLSearchParams({ page: state.page, pageSize: state.pageSize });
 
@@ -43,9 +60,14 @@ async function fetchTodos(){
     alert('Erro ao carregar tarefas: ' + err.message);
     el('tasksBody').innerHTML = '';
     el('empty').classList.remove('hidden');
+  }finally{
+    hideBusy();
   }
 }
 
+/* ===============================
+   Renderização da Lista
+=============================== */
 function renderList(){
   const tbody = el('tasksBody');
   tbody.innerHTML = '';
@@ -60,6 +82,7 @@ function renderList(){
     
     for(const t of state.items){
       const tr = document.createElement('tr');
+
       // ID
       const tdId = document.createElement('td'); 
       tdId.textContent = t.id; 
@@ -108,6 +131,9 @@ function renderList(){
   updatePaginationInfo();
 }
 
+/* ===============================
+   Paginação
+=============================== */
 function updatePaginationInfo(){
   const info = el('pageInfo');
   const start = (state.page-1)*state.pageSize + 1;
@@ -120,6 +146,9 @@ function updatePaginationInfo(){
 function onPrev(){ if(state.page>1){ state.page--; fetchTodos(); } }
 function onNext(){ if(state.page*state.pageSize < state.total){ state.page++; fetchTodos(); } }
 
+/* ===============================
+   Busca
+=============================== */
 function onSearch(e) {
   const v = e.target.value.trim();
   const field = el('searchField').value;
@@ -133,8 +162,11 @@ function onSearch(e) {
   }, 500);
 }
 
-
+/* ===============================
+   Atualizar Status
+=============================== */
 async function onToggleCompleted(id, completed){
+  showBusy();
   try{
     const res = await fetch(`${API_BASE}/${id}`, { 
       method:'PUT', 
@@ -147,13 +179,21 @@ async function onToggleCompleted(id, completed){
   }catch(err){ 
     alert('Erro ao atualizar: ' + err.message); 
     console.error(err);
+  }finally{
+    hideBusy();
   }
 }
 
+/* ===============================
+   Detalhes
+=============================== */
 function openDetail(id){ 
   location.href = `detail.html?id=${encodeURIComponent(id)}`;
 }
 
+/* ===============================
+   Paginação e Sincronização
+=============================== */
 function onPageSizeChange(e){ 
   state.pageSize = parseInt(e.target.value,10)||10; 
   state.page=1; 
@@ -161,6 +201,7 @@ function onPageSizeChange(e){
 }
 
 async function syncTodos(){
+  showBusy();
   try{
     const res = await fetch(`${API_BASE}/sync`, { method: 'POST' });
     if(!res.ok){ 
@@ -173,10 +214,14 @@ async function syncTodos(){
   }catch(err){
     console.error(err);
     alert('Erro ao sincronizar: ' + err.message);
+  }finally{
+    hideBusy();
   }
 }
 
-// attach handlers
+/* ===============================
+   Inicialização
+=============================== */
 document.addEventListener('DOMContentLoaded', ()=>{
   el('prevBtn').addEventListener('click', onPrev);
   el('nextBtn').addEventListener('click', onNext);
@@ -184,6 +229,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
   el('searchField').addEventListener('change', () => fetchTodos());
   el('pageSize').addEventListener('change', onPageSizeChange);
   const sync = el('syncBtn'); if(sync) sync.addEventListener('click', syncTodos);
+
+  /* Modal - Criar Tarefa */
   const createBtn = el('createTask');
   if(createBtn) createBtn.addEventListener('click', ()=>{
     el('taskModal').classList.remove('hidden');
@@ -198,6 +245,8 @@ document.addEventListener('DOMContentLoaded', ()=>{
     el('taskForm').reset();
     el('taskModal').classList.add('hidden');
   });
+
+  /* Envio do Formulário */
   const form = el('taskForm');
   if(form) form.addEventListener('submit', async (e)=>{
     e.preventDefault();
@@ -208,6 +257,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
       alert('Preencha todos os campos obrigatórios.');
       return;
     }
+    showBusy();
     try{
       const res = await fetch(`${API_BASE}`, {
         method: 'POST',
@@ -215,7 +265,7 @@ document.addEventListener('DOMContentLoaded', ()=>{
         body: JSON.stringify({ title, userId, completed })
       });
       if(!res.ok){
-        // Tenta interpretar JSON com { message: '...' }
+        // tenta interpretar JSON
         let bodyMessage = '';
         try{
           const json = await res.json();
@@ -224,26 +274,27 @@ document.addEventListener('DOMContentLoaded', ()=>{
           try{ bodyMessage = await res.text(); }catch(__){ bodyMessage = ''; }
         }
 
-        // Mensagem amigável para regra de negócio específica
+        // regra de negócio
         if(bodyMessage && bodyMessage.includes('5 tarefas incompletas')){
           throw new Error('Usuário atingiu limite de 5 tarefas incompletas, não é possível cadastrar mais.');
         }
 
-        // fallback genérico
         const text = bodyMessage || (`Status ${res.status}`);
         throw new Error(text);
       }
       el('taskForm').reset();
       el('taskModal').classList.add('hidden');
-      fetchTodos();
+      await fetchTodos();
       alert('Tarefa cadastrada com sucesso!');
     }catch(err){
-      // Mostra a mensagem já formatada pelo branch acima (sem prefixos adicionais)
       alert(err.message || 'Erro ao cadastrar');
       console.error(err);
+    }finally{
+      hideBusy();
     }
   });
-  // initialize
+
+  // inicializa a página
   state.pageSize = parseInt(el('pageSize').value,10)||10;
   fetchTodos();
 });

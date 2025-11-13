@@ -1,5 +1,5 @@
 // detail.js - mostra detalhes de uma tarefa
-// Note: backend exposes routes at /todos (not /api/todos)
+// backend expõe a rota /todos
 const API_BASE = "http://localhost:5188/todos";
 function el(id){ return document.getElementById(id); }
 function showBusy(show){ const b = el('busy'); if(b){ b.classList.toggle('hidden', !show); } }

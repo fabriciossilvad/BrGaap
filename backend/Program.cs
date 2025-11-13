@@ -16,7 +16,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 // Limitar conexão apenas ao frontend
 builder.Services.AddCors(options =>
 {
-    options.AddPolicy("AllowUI5Frontend", policy =>
+    options.AddPolicy("AllowOnlyLocalFrontend", policy =>
         policy
             .WithOrigins("http://localhost:5500")
             .AllowAnyHeader()
@@ -92,7 +92,7 @@ if (app.Environment.IsDevelopment())
 
 
 app.UseHttpsRedirection();
-app.UseCors("AllowUI5Frontend");
+app.UseCors("AllowOnlyLocalFrontend");
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
