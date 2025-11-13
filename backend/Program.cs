@@ -13,14 +13,16 @@ builder.Services.AddHttpClient();
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Limitar conexão apenas ao frontend
 builder.Services.AddCors(options =>
 {
     options.AddPolicy("AllowUI5Frontend", policy =>
         policy
-            .AllowAnyOrigin()
+            .WithOrigins("http://localhost:5500")
             .AllowAnyHeader()
             .AllowAnyMethod());
 });
+
 var app = builder.Build();
 // Configuração do Pipeline HTTP.
 

@@ -78,7 +78,7 @@ function renderList(){
       tdUser.textContent = t.userId; 
       tr.appendChild(tdUser);
       
-      // completed icon (✔️ ou ❌)
+      // completed icon 
       const tdChk = document.createElement('td');
       tdChk.className = 'status-cell';
       tdChk.dataset.concluido = t.completed;
