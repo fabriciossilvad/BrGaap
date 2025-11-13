@@ -47,7 +47,7 @@ namespace TasksAPI.Controllers
 
             IQueryable<Todo> query = _context.Todos.AsNoTracking();
 
-            // 🔍 Filtragem
+            // Filtros
             if (!string.IsNullOrEmpty(title))
             {
                 var t = title.Trim();
@@ -64,7 +64,7 @@ namespace TasksAPI.Controllers
                 query = query.Where(x => x.Completed == completed.Value);
             }
 
-            // 🔢 Ordenação dinâmica
+            // Ordenação
             bool ascending = string.Equals(order, "asc", StringComparison.OrdinalIgnoreCase);
             query = sort?.ToLower() switch
             {
@@ -74,7 +74,7 @@ namespace TasksAPI.Controllers
                 _ => ascending ? query.OrderBy(t => t.Id) : query.OrderByDescending(t => t.Id),
             };
 
-            // 📊 Paginação
+            // Controle de Paginação
             var total = await query.CountAsync();
             var items = await query
                 .Skip((page - 1) * pageSize)
@@ -142,6 +142,18 @@ namespace TasksAPI.Controllers
         {
             if (string.IsNullOrWhiteSpace(dto.Title))
                 return BadRequest("Título é obrigatório.");
+
+            // Regra de negócio: não permitir que um usuário tenha mais de 5 tarefas incompletas
+            if (!dto.Completed)
+            {
+                var incompleteCount = await _context.Todos
+                    .CountAsync(t => t.UserId == dto.UserId && !t.Completed);
+
+                if (incompleteCount >= 5)
+                {
+                    return BadRequest(new { message = "Não é possível cadastrar: usuário já possui 5 tarefas incompletas." });
+                }
+            }
 
             var todo = new Todo
             {

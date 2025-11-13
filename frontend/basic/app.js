@@ -215,14 +215,31 @@ document.addEventListener('DOMContentLoaded', ()=>{
         body: JSON.stringify({ title, userId, completed })
       });
       if(!res.ok){
-        const t = await res.text(); throw new Error('Status ' + res.status + ' - ' + t);
+        // Tenta interpretar JSON com { message: '...' }
+        let bodyMessage = '';
+        try{
+          const json = await res.json();
+          if(json && json.message) bodyMessage = json.message;
+        }catch(_){
+          try{ bodyMessage = await res.text(); }catch(__){ bodyMessage = ''; }
+        }
+
+        // Mensagem amigável para regra de negócio específica
+        if(bodyMessage && bodyMessage.includes('5 tarefas incompletas')){
+          throw new Error('Usuário atingiu limite de 5 tarefas incompletas, não é possível cadastrar mais.');
+        }
+
+        // fallback genérico
+        const text = bodyMessage || (`Status ${res.status}`);
+        throw new Error(text);
       }
       el('taskForm').reset();
       el('taskModal').classList.add('hidden');
       fetchTodos();
       alert('Tarefa cadastrada com sucesso!');
     }catch(err){
-      alert('Erro ao cadastrar: ' + err.message);
+      // Mostra a mensagem já formatada pelo branch acima (sem prefixos adicionais)
+      alert(err.message || 'Erro ao cadastrar');
       console.error(err);
     }
   });
