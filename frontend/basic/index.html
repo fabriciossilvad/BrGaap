@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Tasks - Lista</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+  <header class="topbar">
+    <h1>Tasks</h1>
+    <div class="controls">
+      <input id="search" type="search" placeholder="Buscar..." />
+
+      <select id="searchField">
+        <option value="title">Título</option>
+        <option value="userId">Usuário (ID)</option>
+        <option value="completed">Status</option>
+      </select>
+
+      <select id="pageSize">
+        <option value="5">5</option>
+        <option value="10" selected>10</option>
+        <option value="20">20</option>
+      </select>
+
+      <button id="syncBtn" class="button secondary">Importar Tarefas</button>
+    </div>
+
+  </header>
+
+  <main>
+    <div id="busy" class="busy hidden">
+      <!-- Spinner removido -->
+
+      <div class="tasks-scroll-area">
+        <table class="tasks-table" id="tasksTable">
+          <thead>
+            <tr>
+              <th>ID</th>
+              <th>Título</th>
+              <th>UserId</th>
+              <th>Concluído</th>
+              <th>Ações</th>
+            </tr>
+          </thead>
+          <tbody id="tasksBody">
+            <!-- preenchido via JS -->
+          </tbody>
+        </table>
+      </div>
+
+      <div id="empty" class="empty hidden">Nenhuma tarefa encontrada</div>
+
+      <nav class="pagination">
+        <button id="prevBtn">← Anterior</button>
+        <span id="pageInfo">Página 1</span>
+        <button id="nextBtn">Próxima →</button>
+      </nav>
+  </main>
+
+  <footer class="footer">
+    <small>Frontend simples para consumir TasksAPI.</small>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+
+</html>

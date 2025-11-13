@@ -1,0 +1,296 @@
+/* ===============================
+   Variáveis e Reset
+=============================== */
+:root {
+  --accent: #0A84FF;
+  --muted: #999;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+body {
+  margin: 0;
+  font-family: Segoe UI, Arial, sans-serif;
+  color: #222;
+  display: flex;
+  flex-direction: column;
+  min-height: 100vh;
+  overflow: hidden; /* impede o body de rolar */
+}
+
+/* ===============================
+   Topbar
+=============================== */
+.topbar {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 12px 16px;
+  background: #f5f7fa;
+  border-bottom: 1px solid #e2e6ef;
+}
+
+.topbar h1 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.controls {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+}
+
+.controls input[type=search] {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+  width: 260px;
+}
+
+.controls select {
+  padding: 8px;
+  border-radius: 6px;
+  border: 1px solid #ccc;
+}
+
+/* ===============================
+   Main
+=============================== */
+main {
+  flex: 1;
+  background: #f5f5f5;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  flex-direction: column;
+}
+
+/* Área de rolagem da tabela de tarefas */
+.tasks-scroll-area {
+  max-height: 60vh;
+  overflow-y: auto;
+  background: #fff;
+  border-radius: 8px;
+  box-shadow: 0 1px 4px rgba(0,0,0,0.04);
+  margin-bottom: 12px;
+}
+
+
+/* ===============================
+   Container de Tarefas (Grid + Scroll)
+=============================== */
+.tasks-container {
+  flex: 1;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 16px;
+  padding: 16px;
+  overflow-y: auto;
+  max-height: calc(100vh - 120px);
+  box-sizing: border-box;
+}
+
+.tasks-container::-webkit-scrollbar {
+  width: 8px;
+}
+.tasks-container::-webkit-scrollbar-thumb {
+  background-color: #bbb;
+  border-radius: 4px;
+}
+.tasks-container::-webkit-scrollbar-thumb:hover {
+  background-color: #999;
+}
+
+/* ===============================
+   Tabela de tarefas (caso ainda use)
+=============================== */
+.tasks-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.tasks-table th,
+.tasks-table td {
+  padding: 10px;
+  border-bottom: 1px solid #eee;
+  text-align: left;
+}
+
+.tasks-table tbody tr:hover {
+  background: #fbfcff;
+}
+
+.tasks-table .completed {
+  color: var(--muted);
+  text-decoration: line-through;
+}
+
+.tasks-table td.actions {
+  white-space: nowrap;
+}
+
+/* ===============================
+   Botões
+=============================== */
+.button {
+  padding: 6px 10px;
+  border-radius: 6px;
+  border: 0;
+  background: var(--accent);
+  color: #fff;
+  cursor: pointer;
+}
+
+.button.secondary {
+  background: #6c757d;
+}
+
+.button.create.task {
+  background-color: #28a745;
+}
+
+/* ===============================
+   Empty state
+=============================== */
+.empty {
+  padding: 20px;
+  text-align: center;
+  color: #e71010;
+}
+
+.hidden {
+  display: none;
+}
+
+/* ===============================
+   Paginação
+=============================== */
+.pagination {
+  display: flex;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  margin: 12px 0;
+}
+
+/* ===============================
+   Footer
+=============================== */
+footer.footer {
+  padding: 12px 16px;
+  background: #fafafa;
+  border-top: 1px solid #eee;
+  text-align: center;
+}
+
+/* ===============================
+   Busy indicator
+=============================== */
+.busy {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background: rgba(255, 255, 255, 0.75);
+  z-index: 60;
+}
+
+.busy-text {
+  margin-top: 12px;
+  color: #333;
+}
+
+/* ===============================
+   Modal Close Button
+=============================== */
+.close-modal-btn {
+  position: absolute;
+  top: 12px;
+  right: 16px;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: #888;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.close-modal-btn:hover {
+  color: #e74c3c;
+}
+
+/* ===============================
+   Detail Page
+=============================== */
+.detail {
+  max-width: 720px;
+  margin: 12px auto;
+  padding: 12px;
+  border-radius: 8px;
+  background: #fff;
+  box-shadow: 0 1px 4px rgba(0, 0, 0, 0.04);
+}
+
+.detail .field {
+  margin-bottom: 12px;
+}
+
+.label {
+  font-weight: 600;
+  color: #333;
+}
+
+.value {
+  margin-top: 6px;
+  color: #111;
+}
+
+/* ===============================
+   Responsividade
+=============================== */
+@media (max-width: 640px) {
+  .controls input[type=search] {
+    width: 140px;
+  }
+
+  .tasks-table th:nth-child(3),
+  .tasks-table td:nth-child(3) {
+    display: none;
+  }
+
+  .topbar h1 {
+    font-size: 1rem;
+  }
+}
+
+/* ===============================
+   Status de Conclusão (✔️ / ❌)
+=============================== */
+.status-cell {
+  text-align: center;
+  font-size: 20px;
+  cursor: pointer;
+  user-select: none;
+  transition: transform 0.15s ease, color 0.2s ease, opacity 0.2s ease;
+}
+
+.status-cell[data-concluido="true"] {
+  color: rgb(16, 216, 16);
+}
+
+.status-cell[data-concluido="false"] {
+  color: rgb(196, 4, 4);
+}
+
+.status-cell:hover {
+  transform: scale(1.2);
+  opacity: 0.9;
+}
