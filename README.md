@@ -11,7 +11,7 @@ Este projeto é uma aplicação full stack composta por:
 
 ## 📂 Estrutura do Projeto
 
-    /backend
+    /brgaap
         /backend
             Controllers/
             Data/
@@ -23,7 +23,7 @@ Este projeto é uma aplicação full stack composta por:
             TasksAPI.csproj
             tasks.db
 
-    /frontend
+ 
         /frontend/basic
             index.html
             detail.html
