@@ -11,25 +11,37 @@ Este projeto é uma aplicação full stack composta por:
 
 ## 📂 Estrutura do Projeto
 
-    /brgaap
-        /backend
-            Controllers/
-            Data/
-            Migrations/
-            Models/
-            Properties/
-            appsettings.json
-            Program.cs
-            TasksAPI.csproj
-            tasks.db
+BrGaap/
+│
+├── backend/                # API .NET (TasksAPI)
+│   ├── Controllers/
+│   ├── Data/
+│   ├── Migrations/
+│   ├── Models/
+│   ├── Properties/
+│   ├── appsettings.json
+│   │── Program.cs
+│   ├── TasksAPI.csproj
+│   └── README.md
+│
+├── frontend/               # Aplicação web
+│   └── basic/
+│       ├── app.js
+│       ├── detail.html
+│       ├── detail.js
+│       ├── index.html
+│       ├── styles.css
+│       └── README.md
+│
+├── TasksAPI.Tests/         # Testes de integração
+│   ├── CustomWebApplicationFactory.cs
+│   ├── TodosIntegrationTests.cs
+│   ├── TasksAPI.Tests.csproj
+│   └── README.md
+│
+├── README.md               # Documentação geral do projeto
+└── TasksAPI.sln            # Solução .NET
 
- 
-        /frontend/basic
-            index.html
-            detail.html
-            app.js
-            detail.js
-            styles.css
 
 ------------------------------------------------------------------------
 
