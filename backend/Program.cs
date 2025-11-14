@@ -10,8 +10,11 @@ builder.Services.AddSwaggerGen();
 builder.Services.AddHttpClient();
 
 // Configuração do banco de dados
-builder.Services.AddDbContext<AppDbContext>(options =>
-    options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+if (!builder.Environment.IsEnvironment("Testing"))
+{
+    builder.Services.AddDbContext<AppDbContext>(options =>
+        options.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection")));
+}
 
 // Limitar conexão apenas ao frontend
 builder.Services.AddCors(options =>
@@ -91,8 +94,15 @@ if (app.Environment.IsDevelopment())
 }
 
 
-app.UseHttpsRedirection();
+if (!app.Environment.IsEnvironment("Testing"))
+{
+    app.UseHttpsRedirection();
+}
+
 app.UseCors("AllowOnlyLocalFrontend");
 app.UseAuthorization();
 app.MapControllers();
 app.Run();
+
+// Visibilidade interna para testes
+public partial class Program { }
