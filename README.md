@@ -11,7 +11,7 @@ Este projeto é uma aplicação full stack composta por:
 
 ## 📂 Estrutura do Projeto
 
-    /backend
+    /brgaap
         /backend
             Controllers/
             Data/
@@ -23,7 +23,7 @@ Este projeto é uma aplicação full stack composta por:
             TasksAPI.csproj
             tasks.db
 
-    /frontend
+ 
         /frontend/basic
             index.html
             detail.html
@@ -51,7 +51,7 @@ Este projeto é uma aplicação full stack composta por:
 1.  Entre na pasta:
 
     ``` bash
-    cd backend/backend
+    cd backend
     ```
 
 2.  Restaurar pacotes:
@@ -77,7 +77,7 @@ Este projeto é uma aplicação full stack composta por:
 
 O frontend está localizado em:
 
-    /frontend/frontend/basic
+    /frontend/basic
 
 ### ✔ Porta usada
 
@@ -113,7 +113,7 @@ O projeto utiliza SQLite via Entity Framework Core.
 
 Arquivo:
 
-    backend/backend/tasks.db
+    backend/tasks.db
 
 ------------------------------------------------------------------------
 
@@ -121,11 +121,5 @@ Arquivo:
 
 -   Deploy com Docker
 -   Autenticação JWT
--   Paginação e filtros
 -   Frontend refeito em React ou Vue
 
-------------------------------------------------------------------------
-
-## 📌 Autor
-
-Projeto enviado para organização no Git.
