@@ -22,6 +22,7 @@ Este projeto é uma aplicação full stack composta por:
             Program.cs
             TasksAPI.csproj
             README.md
+            tasks.db
 
         /frontend
             /basic
